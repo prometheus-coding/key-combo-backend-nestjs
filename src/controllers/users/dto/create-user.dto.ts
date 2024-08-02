@@ -5,10 +5,10 @@ export class CreateUserDto {
 
   username: string;
   @ApiProperty({ example: 'John', description: 'The name of the user' })
-  firstName: string;
+  first_name: string;
 
   @ApiProperty({ example: 'Doe', description: 'The second name of the user' })
-  lastName: string;
+  last_name: string;
 
   @ApiProperty({ example: 'john@example.com', description: 'The email of the user' })
   email: string;

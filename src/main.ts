@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.setGlobalPrefix('api/v1')
   const config = new DocumentBuilder()
   .setTitle('K-Combo API')
   .setDescription('The K-Combo REST API description')
@@ -13,7 +14,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
   
-  app.setGlobalPrefix('api/v1')
   await app.listen(3000);
 }
 bootstrap();
