@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class CreateNvimPluginDto {
+export class NvimPluginDto {
     @ApiProperty({ example: 'xXjohndoeXx_swaggerITA', description: 'The username of the user' })
     username: string;
     
