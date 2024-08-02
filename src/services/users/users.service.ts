@@ -10,7 +10,7 @@ export class UsersService {
     @InjectConnection() private connection: Connection
   ) {
     console.log('Database name:', this.connection.name);
-    console.log('Collections:', Object.keys(this.connection.collections));
+    console.log('User service successfully mapped to ', Object.keys(this.connection.collections), 'collection');
   }
 
   async create(createUserDto: any): Promise<User> {
