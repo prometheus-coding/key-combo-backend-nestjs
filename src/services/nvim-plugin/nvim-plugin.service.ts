@@ -25,7 +25,7 @@ export class NvimPluginService {
     }
   }
 
-
+// Metti i commenti dio bono
   async getNvimData(nvimPluginDto: NvimPluginDto) {
     this.logger.log(`request received:${JSON.stringify(nvimPluginDto)}`)
     const id_token = nvimPluginDto.id_token
