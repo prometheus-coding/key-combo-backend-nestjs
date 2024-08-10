@@ -10,6 +10,5 @@ import { User, UserSchema } from 'src/services/users/users.schema';
   ],
   controllers: [NvimPluginController],
   providers: [NvimPluginService],
-  exports: [NvimPluginService],
 })
 export class NvimPluginModule {}
