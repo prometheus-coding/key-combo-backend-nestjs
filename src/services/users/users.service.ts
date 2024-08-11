@@ -4,6 +4,7 @@ import { Connection, Model } from 'mongoose';
 import { User, UserDocument } from './users.schema';
 import { CreateUserDto } from 'src/controllers/users/dto/create-user.dto';
 import * as crypto from 'crypto';
+import { UpdateUserDto } from 'src/controllers/users/dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -25,9 +26,26 @@ export class UsersService {
     });
     return createdUser.save();
   }
-
+  
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
+  }
+
+  async getUserDataFromToken(id_token: string): Promise<User | null>{
+    const idObg = new Object({
+      "id_token": id_token
+    })
+    try {
+      const user = await this.userModel.findOne(idObg).exec()
+      if(user){
+        return user
+      } else {
+        return null
+      }
+    } catch (error) {
+      console.error('Error retrieving user:', error)
+      return null
+    }
   }
 
   // Add other methods as needed

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { NvimPluginService } from 'src/services/nvim-plugin/nvim-plugin.service';
-import { NvimPluginDto } from './dto/create-nvim-plugin.dto';
+import { sendNvimDataDto } from './dto/sendNvimData.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 @ApiTags('nvim')
@@ -14,17 +14,8 @@ export class NvimPluginController {
     status: 201,
     description: 'The user has been successfully created.',
   })
-  async getNvimScoreData(@Body() createNvimPluginDto: NvimPluginDto) {
-      return this.nvimPluginService.getNvimData(createNvimPluginDto);
-  }
-  @Post('/getUserFromToken')
-  @ApiOperation({ summary: 'Get user data from token' })
-  @ApiResponse({
-    status: 201,
-    description: 'The user has been successfully created.',
-  })
-  async getUserDataFromTokenId (@Body() id_token: string){
-    return await this.nvimPluginService.getUserDataFromToken(id_token)
+  async sendScore(@Body() createNvimPluginDto: sendNvimDataDto) {
+      return this.nvimPluginService.sendNvimScoreData(createNvimPluginDto);
   }
 
 }

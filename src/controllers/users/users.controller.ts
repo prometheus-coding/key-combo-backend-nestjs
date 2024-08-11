@@ -29,5 +29,16 @@ export class UsersController {
     return {users, count: users.length}
   }
 
+  @Post('/getUserFromTokenId')
+  @ApiOperation({ summary: 'Get user data from token' })
+  @ApiResponse({
+    status: 201,
+    description: 'User retrieved successfully',
+  })
+  async getUserDataFromTokenId (@Body() id_token: string){
+    return await this.usersService.getUserDataFromToken(id_token)
+  }
+
+
   // Add other endpoints as needed
 }
