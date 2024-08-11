@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { GetUsersResponseDto } from './dto/get-users-response.dto';
 import { User } from 'src/services/users/users.schema';
 import { UsersService } from 'src/services/users/users.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -19,6 +20,16 @@ export class UsersController {
   })
   async create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+  @Post('/updateUserScore')
+  @ApiOperation({ summary: 'Create a new user' })
+  @ApiResponse({
+    status: 201,
+    description: 'The user has been successfully created.',
+    type: User
+  })
+  async updateUserScore(@Body() updateUserScoreDto: UpdateUserDto) {
+    return this.usersService.updateUserScore(updateUserScoreDto)
   }
 
   @Get()

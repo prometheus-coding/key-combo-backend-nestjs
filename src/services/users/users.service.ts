@@ -26,6 +26,21 @@ export class UsersService {
     });
     return createdUser.save();
   }
+
+  async updateUserScore(updateUserScoreDto: UpdateUserDto): Promise<User | null> {
+    const id_token = updateUserScoreDto.id_token
+    const user = await this.userModel.findOne({ id_token }).exec();
+    if (!user) {
+      return null;
+    }
+
+    user.score = updateUserScoreDto.score;
+    user.combo_duration_in_seconds = updateUserScoreDto.combo_duration_in_seconds;
+    user.total_key_pressed = updateUserScoreDto.total_key_pressed;
+
+    return user.save();
+  }
+
   
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
