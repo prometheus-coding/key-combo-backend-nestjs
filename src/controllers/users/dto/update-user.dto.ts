@@ -12,4 +12,8 @@ export class UpdateUserDto {
 
     @ApiProperty({ example: 120, description: 'The total number of key pressed during the combo' })
     total_key_pressed: number;
+
+    @ApiProperty({ example: '2023-08-01T12:00:00Z', description: 'Combo updated at'})
+    score_updated_at: Date;
+
   }

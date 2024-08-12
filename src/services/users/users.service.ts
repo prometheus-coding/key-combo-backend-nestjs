@@ -27,20 +27,67 @@ export class UsersService {
     return createdUser.save();
   }
 
-  async updateUserScore(updateUserScoreDto: UpdateUserDto): Promise<User | null> {
-    const id_token = updateUserScoreDto.id_token
-    const user = await this.userModel.findOne({ id_token }).exec();
-    if (!user) {
-      return null;
+  async updateUserScore(updateUserScoreDto: UpdateUserDto): Promise<{
+    status: string;
+    statusCode: number;
+    message: string;
+    data?: {
+      user: {
+        username: string;
+        score: number;
+        combo_duration_in_seconds: number;
+        total_key_pressed: number;
+        score_updated_at: Date;
+      };
+    };
+    error?: string;
+  }> {
+    const id_token = updateUserScoreDto.id_token;
+    
+    try {
+      const user = await this.userModel.findOne({ id_token }).exec();
+      
+      if (!user) {
+        return {
+          status: 'fail',
+          statusCode: 404,
+          message: 'User not found',
+          error: 'No user found with the provided id_token'
+        };
+      }
+  
+      // Update user score data
+      user.score = updateUserScoreDto.score;
+      user.combo_duration_in_seconds = updateUserScoreDto.combo_duration_in_seconds;
+      user.total_key_pressed = updateUserScoreDto.total_key_pressed;
+      user.score_updated_at = updateUserScoreDto.score_updated_at;
+  
+      const updatedUser = await user.save();
+  
+      return {
+        status: 'success',
+        statusCode: 200,
+        message: 'User score updated successfully',
+        data: {
+          user: {
+            username: updatedUser.username,
+            score: updatedUser.score,
+            combo_duration_in_seconds: updatedUser.combo_duration_in_seconds,
+            total_key_pressed: updatedUser.total_key_pressed,
+            score_updated_at: updatedUser.score_updated_at
+
+          }
+        }
+      };
+    } catch (error) {
+      return {
+        status: 'error',
+        statusCode: 500,
+        message: 'An error occurred while updating the user score',
+        error: error.message
+      };
     }
-
-    user.score = updateUserScoreDto.score;
-    user.combo_duration_in_seconds = updateUserScoreDto.combo_duration_in_seconds;
-    user.total_key_pressed = updateUserScoreDto.total_key_pressed;
-
-    return user.save();
   }
-
   
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
