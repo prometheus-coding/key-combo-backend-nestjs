@@ -4,6 +4,27 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export type UserDocument = User & Document;
 
+@Schema()
+export class ScoreInfo {
+  @ApiProperty({ example: 0, description: 'The score of the user', default: 0 })
+  @Prop({ default: 0 })
+  score: number;
+
+  @ApiProperty({ example: 0, description: 'The combo duration in seconds', default: 0 })
+  @Prop({ default: 0 })
+  combo_duration_in_seconds: number;
+
+  @ApiProperty({ example: 0, description: 'The total number of keys pressed', default: 0 })
+  @Prop({ default: 0 })
+  total_key_pressed: number;
+
+  @ApiProperty({ example: new Date(), description: 'When the score was achieved' })
+  @Prop({ default: Date.now })
+  achieved_at: Date;
+}
+
+const ScoreInfoSchema = SchemaFactory.createForClass(ScoreInfo);
+
 @Schema({ collection: 'User' })
 export class User {
   @ApiProperty({ example: 'johndoe', description: 'The username of the user' })
@@ -30,25 +51,13 @@ export class User {
   @Prop({ required: true })
   id_token: string;
 
-  @ApiProperty({ example: 100, description: 'The score of the user', default: 0 })
-  @Prop({ default: 0 })
-  score: number;
-
-  @ApiProperty({ example: 60, description: 'The combo duration in seconds', default: 0 })
-  @Prop({ default: 0 })
-  combo_duration_in_seconds: number;
-
-  @ApiProperty({ example: 1000, description: 'The total number of keys pressed', default: 0 })
-  @Prop({ default: 0 })
-  total_key_pressed: number;
+  @ApiProperty({ type: [ScoreInfo], description: 'The score history of the user' })
+  @Prop({ type: [ScoreInfoSchema], default: [] })
+  scores: ScoreInfo[];
 
   @ApiProperty({ example: '2023-08-01T12:00:00Z', description: 'The creation date of the user' })
   @Prop({ default: Date.now })
   created_at: Date;
-
-  @ApiProperty({ example: '2023-08-01T12:00:00Z', description: 'Last time combo was updated' })
-  @Prop({ default: Date.now })
-  score_updated_at: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

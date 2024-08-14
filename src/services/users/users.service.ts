@@ -1,10 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
-import { User, UserDocument } from './users.schema';
+import { ScoreInfo, User, UserDocument,  } from './users.schema';
 import { CreateUserDto } from 'src/controllers/users/dto/create-user.dto';
 import * as crypto from 'crypto';
 import { UpdateUserDto } from 'src/controllers/users/dto/update-user.dto';
+
+// export interface ScoreInfo {
+//   score: number;
+//   combo_duration_in_seconds: number;
+//   total_key_pressed: number;
+//   achieved_at: Date;
+// }
 
 @Injectable()
 export class UsersService {
@@ -34,10 +41,7 @@ export class UsersService {
     data?: {
       user: {
         username: string;
-        score: number;
-        combo_duration_in_seconds: number;
-        total_key_pressed: number;
-        score_updated_at: Date;
+        scores: ScoreInfo
       };
     };
     error?: string;
@@ -57,10 +61,13 @@ export class UsersService {
       }
   
       // Update user score data
-      user.score = updateUserScoreDto.score;
-      user.combo_duration_in_seconds = updateUserScoreDto.combo_duration_in_seconds;
-      user.total_key_pressed = updateUserScoreDto.total_key_pressed;
-      user.score_updated_at = updateUserScoreDto.score_updated_at;
+      const newScore:ScoreInfo = {
+        score: updateUserScoreDto.score,
+        combo_duration_in_seconds: updateUserScoreDto.combo_duration_in_seconds,
+        total_key_pressed: updateUserScoreDto.total_key_pressed,
+        achieved_at: updateUserScoreDto.score_updated_at
+      }
+      user.scores.push(newScore)
   
       const updatedUser = await user.save();
   
@@ -71,11 +78,7 @@ export class UsersService {
         data: {
           user: {
             username: updatedUser.username,
-            score: updatedUser.score,
-            combo_duration_in_seconds: updatedUser.combo_duration_in_seconds,
-            total_key_pressed: updatedUser.total_key_pressed,
-            score_updated_at: updatedUser.score_updated_at
-
+            scores: newScore
           }
         }
       };

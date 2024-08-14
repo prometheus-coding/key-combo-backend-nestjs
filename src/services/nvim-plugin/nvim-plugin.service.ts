@@ -36,9 +36,7 @@ export class NvimPluginService {
               first_name: user.first_name,
               last_name: user.last_name,
               email: user.email,
-              score: user.score,
-              combo_duration_in_seconds: user.combo_duration_in_seconds,
-              total_key_pressed: user.total_key_pressed
+              scores: user.scores,
             }
           }
         };
