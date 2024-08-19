@@ -28,6 +28,10 @@ const ScoreInfoSchema = SchemaFactory.createForClass(ScoreInfo);
 @Schema({ collection: 'User' })
 export class User {
 
+  @ApiProperty({ example: '66b77f4dcce779e05c65018f', description: 'The unique identifier for the user' })
+  @Prop({ type: MongooseSchema.Types.ObjectId, auto: true })
+  _id: MongooseSchema.Types.ObjectId;
+
   @ApiProperty({ example: 'johndoe', description: 'The username of the user' })
   @Prop({ required: true })
   username: string;
