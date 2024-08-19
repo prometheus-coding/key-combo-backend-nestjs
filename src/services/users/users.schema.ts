@@ -58,6 +58,8 @@ export class User {
   @ApiProperty({ example: '2023-08-01T12:00:00Z', description: 'The creation date of the user' })
   @Prop({ default: Date.now })
   created_at: Date;
+
+  
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
