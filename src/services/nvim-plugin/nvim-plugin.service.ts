@@ -1,36 +1,62 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { NvimPluginDto } from 'src/controllers/nvim-plugin/dto/create-nvim-plugin.dto';
+import { sendNvimDataDto } from 'src/controllers/nvim-plugin/dto/sendNvimData.dto';
 import { User, UserDocument } from '../users/users.schema';
 import { Connection, Model } from 'mongoose';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class NvimPluginService {
   private readonly logger = new Logger(NvimPluginService.name);
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectConnection() private connection: Connection
+    @InjectConnection() private connection: Connection,
+    private usersService: UsersService
   ){
     console.log('Database name:', this.connection.name);
     console.log('Nvim service successfully mapped to ', Object.keys(this.connection.collections), 'collection');
   }
   
-  async getUserDataFromToken(id_token: string): Promise<User | null>{
+  async sendNvimScoreData(sendNvimDataDto: sendNvimDataDto) {
+    this.logger.log(`Request received: ${JSON.stringify(sendNvimDataDto)}`);
+    const id_token = sendNvimDataDto.id_token;
+  
     try {
-      const user = await this.userModel.findOne({ id_token }).exec()
-      return user
+      const user = await this.usersService.getUserDataFromToken(id_token)
+      
+      if (user) {
+        this.logger.log(`User retrieved with token ${id_token}:\n${JSON.stringify(user, null, 2)}`);
+        return {
+          status: 'success',
+          statusCode: 200,
+          message: 'User data retrieved successfully',
+          data: {
+            user: {
+              username: user.username,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              email: user.email,
+              scores: user.scores,
+            }
+          }
+        };
+      } else {
+        return {
+          status: 'fail',
+          statusCode: 404,
+          message: 'User not found',
+          data: null
+        };
+      }
     } catch (error) {
-      console.error('Error retrieving user:', error)
-      return null
+      this.logger.error(`Error retrieving user data: ${error.message}`);
+      return {
+        status: 'error',
+        statusCode: 500,
+        message: 'An error occurred while processing your request',
+        error: error.message
+      };
     }
-  }
-
-
-  async getNvimData(nvimPluginDto: NvimPluginDto) {
-    this.logger.log(`request received:${JSON.stringify(nvimPluginDto)}`)
-    const id_token = nvimPluginDto.id_token
-    const user = await this.getUserDataFromToken(id_token)
-    this.logger.log(`User retrieved with token ${id_token}:\n${JSON.stringify(user, null, 2)}`);
   }
 
 }

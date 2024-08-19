@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './services/users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { NvimPluginModule } from './services/nvim-plugin/nvim-plugin.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { NvimPluginModule } from './services/nvim-plugin/nvim-plugin.module';
       inject: [ConfigService],
     }),
     UsersModule,
-    NvimPluginModule
+    NvimPluginModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
