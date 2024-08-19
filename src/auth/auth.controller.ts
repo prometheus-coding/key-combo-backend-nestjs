@@ -2,8 +2,10 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { CreateUserDto } from 'src/controllers/users/dto/create-user.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Tokens } from './types/tokens.type';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
 
@@ -16,8 +18,8 @@ export class AuthController {
       status: 201,
       description: 'The user has been successfully created.',
     })
-    signupLocal(@Body() createUserDto: CreateUserDto){
-        this.authService.signupLocal(createUserDto)
+    signupLocal(@Body() createUserDto: CreateUserDto): Promise<Tokens>{
+        return this.authService.signupLocal(createUserDto)
     }
 
     @Post('/local/signin')

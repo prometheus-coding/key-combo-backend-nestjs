@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 
 export type UserDocument = User & Document;
@@ -27,6 +27,7 @@ const ScoreInfoSchema = SchemaFactory.createForClass(ScoreInfo);
 
 @Schema({ collection: 'User' })
 export class User {
+
   @ApiProperty({ example: 'johndoe', description: 'The username of the user' })
   @Prop({ required: true })
   username: string;
@@ -63,3 +64,4 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
