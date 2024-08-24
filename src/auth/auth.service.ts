@@ -9,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from 'src/users/users.schema';
 import { Model } from 'mongoose';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UtilsService } from 'src/utils/utils';
 
 @Injectable()
 export class AuthService {
@@ -16,17 +17,12 @@ export class AuthService {
     constructor(
         @InjectModel(User.name) private userModel: Model<UserDocument>,
         private userService: UsersService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private utils: UtilsService
     ){}
 
-    hashData(data: string) {
-        const saltOrRounds = 10;
-        return bcrypt.hash(data, saltOrRounds)
-    }
 
-    private generateRandomToken(): string {
-        return crypto.randomBytes(32).toString('hex');
-    }
+
 
     
     async getTokens(userId: string, email: string) {
@@ -53,7 +49,7 @@ export class AuthService {
     }
 
     async signupLocal(createUserDto: CreateUserDto): Promise<Tokens> {
-        const hashedPassword = await this.hashData(createUserDto.password)
+        const hashedPassword = await this.utils.hashData(createUserDto.password)
         const userDto: CreateUserDto = {
             email: createUserDto.email,
             password: hashedPassword,
@@ -63,7 +59,7 @@ export class AuthService {
         }
         const newUser = new this.userModel({
             ...userDto,
-            id_token: this.generateRandomToken()
+            id_token: this.utils.generateRandomToken()
         });
         await newUser.save();
 
