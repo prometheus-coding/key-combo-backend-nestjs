@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { ScoreInfo, User, UserDocument,  } from './users.schema';
-import { CreateUserDto } from 'src/controllers/users/dto/create-user.dto';
 import * as crypto from 'crypto';
-import { UpdateUserDto } from 'src/controllers/users/dto/update-user.dto';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 // export interface ScoreInfo {
 //   score: number;

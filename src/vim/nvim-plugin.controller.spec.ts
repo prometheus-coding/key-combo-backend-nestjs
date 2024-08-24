@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NvimPluginController } from './nvim-plugin.controller';
-import { NvimPluginService } from 'src/services/nvim-plugin/nvim-plugin.service';
+import { NvimPluginService } from 'src/vim/nvim-plugin.service';
 
 describe('NvimPluginController', () => {
   let controller: NvimPluginController;

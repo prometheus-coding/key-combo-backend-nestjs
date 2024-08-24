@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { NvimPluginService } from 'src/services/nvim-plugin/nvim-plugin.service';
+import { NvimPluginService } from 'src/vim/nvim-plugin.service';
 import { sendNvimDataDto } from './dto/sendNvimData.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../users/dto/create-user.dto';

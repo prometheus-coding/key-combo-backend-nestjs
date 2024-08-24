@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { sendNvimDataDto } from 'src/controllers/nvim-plugin/dto/sendNvimData.dto';
+import { sendNvimDataDto } from 'src/vim/dto/sendNvimData.dto';
 import { User, UserDocument } from '../users/users.schema';
 import { Connection, Model } from 'mongoose';
 import { UsersService } from '../users/users.service';
