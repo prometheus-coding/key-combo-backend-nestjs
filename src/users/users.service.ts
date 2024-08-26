@@ -5,6 +5,7 @@ import { ScoreInfo, User, UserDocument,  } from './users.schema';
 import * as crypto from 'crypto';
 import { UpdateUserScoreDto } from './dto/update-user-score.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user-dto';
 
 // export interface ScoreInfo {
 //   score: number;
@@ -96,24 +97,24 @@ export class UsersService {
     return this.userModel.find().exec();
   }
 
-  async getUserDataFromToken(id_token: string): Promise<User | null>{
-    const idObg = new Object({
-      "id_token": id_token
-    })
-    try {
-      const user = await this.userModel.findOne(idObg).exec()
-      if(user){
-        return user
-      } else {
-        return null
-      }
-    } catch (error) {
-      console.error('Error retrieving user:', error)
-      return null
-    }
-  }
+   async getUserDataFromToken(id_token: string): Promise<User | null>{
+     const idObg = new Object({
+       "id_token": id_token
+     })
+     try {
+       const user = await this.userModel.findOne(idObg).exec()
+       if(user){
+         return user
+       } else {
+         return null
+       }
+     } catch (error) {
+       console.error('Error retrieving user:', error)
+       return null
+     }
+   }
 
-  async updateById (id: string, updateUserDto: UpdateUserScoreDto) : Promise<User>  {
+  async updateById (id: string, updateUserDto: UpdateUserDto) : Promise<User>  {
     const updatedUser = await this.userModel.findByIdAndUpdate(
       id,
       updateUserDto,
@@ -126,5 +127,9 @@ export class UsersService {
 
     return updatedUser;
   }
-  // Add other methods as needed
+
+  async findByEmail(email:string): Promise<User | null >{
+    return this.userModel.findOne({email}).exec()
+  }
+
 }

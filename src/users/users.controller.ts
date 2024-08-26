@@ -5,6 +5,7 @@ import { GetUsersResponseDto } from './dto/get-users-response.dto';
 import { User } from 'src/users/users.schema';
 import { UsersService } from 'src/users/users.service';
 import { UpdateUserScoreDto } from './dto/update-user-score.dto';
+import { AuthDto } from 'src/auth/dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -40,15 +41,24 @@ export class UsersController {
     return {users, count: users.length}
   }
 
-  @Post('/getUserFromTokenId')
-  @ApiOperation({ summary: 'Get user data from token' })
-  @ApiResponse({
-    status: 201,
-    description: 'User retrieved successfully',
-  })
-  async getUserDataFromTokenId (@Body() id_token: string){
-    return await this.usersService.getUserDataFromToken(id_token)
+
+  @Post('/getUserByEmail')
+  @ApiOperation({ summary: 'Get user by email' })
+  @ApiResponse({ status: 200, description: 'Get user by email', type: GetUsersResponseDto })
+  async findByEmail (@Body() authDto: AuthDto) {
+    const user = await this.usersService.findByEmail(authDto.email);
+    return user
   }
+
+ @Post('/getUserFromTokenId')
+ @ApiOperation({ summary: 'Get user data from token' })
+ @ApiResponse({
+   status: 201,
+   description: 'User retrieved successfully',
+ })
+ async getUserDataFromTokenId (@Body() id_token: string){
+   return await this.usersService.getUserDataFromToken(id_token)
+ }
 
 
   // Add other endpoints as needed

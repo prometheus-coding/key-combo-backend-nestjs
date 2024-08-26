@@ -56,6 +56,14 @@ export class User {
   @Prop({ required: true })
   id_token: string;
 
+  @ApiProperty()
+  @Prop({ required: false })
+  refreshToken: string;
+
+  @ApiProperty()
+  @Prop({ required: false })
+  accessToken: string;
+
   @ApiProperty({ type: [ScoreInfo], description: 'The score history of the user' })
   @Prop({ type: [ScoreInfoSchema], default: [] })
   scores: ScoreInfo[];
