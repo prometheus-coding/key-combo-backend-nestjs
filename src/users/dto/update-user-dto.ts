@@ -22,7 +22,7 @@ export class UpdateUserDto {
 
     @ApiProperty({ example: 'dasdasdas sobf aisbfas', description: 'hashedReferethstoken' })
     @Prop({ required: false })
-    refreshToken?: string;
+    refreshToken?: string | null;
 
 
     @ApiProperty({ example: 'password123', description: 'ACcesstoken' })

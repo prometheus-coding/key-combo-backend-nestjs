@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -13,6 +13,7 @@ export class AuthController {
     }
     
     @Post('/local/signup')
+    @HttpCode(HttpStatus.CREATED)
     @ApiOperation({ summary: 'Create a new user with signup' })
     @ApiResponse({
       status: 201,
@@ -23,13 +24,15 @@ export class AuthController {
     }
 
     @Post('/local/signin')
+    @HttpCode(HttpStatus.OK)
     signinLocal(@Body() authDto: AuthDto): Promise<Tokens> {
         return this.authService.signinLocal(authDto)
     }
     
     @Post('/logout')
+    @HttpCode(HttpStatus.OK)
     logout(){
-        this.authService.logout()
+        // return this.authService.logout()
     }
 
     @Post('/refresh')

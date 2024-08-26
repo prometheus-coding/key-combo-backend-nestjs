@@ -92,27 +92,35 @@ export class UsersService {
       };
     }
   }
+
+  async findById(id: string): Promise<User> {
+    const user = await this.userModel.findById(id).exec();
+    if (!user) {
+      throw new NotFoundException(`User with ID "${id}" not found`);
+    }
+    return user;
+  }
   
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
 
-   async getUserDataFromToken(id_token: string): Promise<User | null>{
-     const idObg = new Object({
-       "id_token": id_token
-     })
-     try {
-       const user = await this.userModel.findOne(idObg).exec()
-       if(user){
-         return user
-       } else {
-         return null
-       }
-     } catch (error) {
-       console.error('Error retrieving user:', error)
-       return null
-     }
-   }
+  async getUserDataFromToken(id_token: string): Promise<User | null>{
+    const idObg = new Object({
+      "id_token": id_token
+    })
+    try {
+      const user = await this.userModel.findOne(idObg).exec()
+      if(user){
+        return user
+      } else {
+        return null
+      }
+    } catch (error) {
+      console.error('Error retrieving user:', error)
+      return null
+    }
+  }
 
   async updateById (id: string, updateUserDto: UpdateUserDto) : Promise<User>  {
     const updatedUser = await this.userModel.findByIdAndUpdate(

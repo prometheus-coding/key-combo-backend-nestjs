@@ -113,7 +113,12 @@ export class AuthService {
         }
     }
     
-    logout(){}
+    async logout(userId: string){
+        const user = await this.userService.findById(userId)
+        if (user && user.refreshToken){
+            await this.userService.updateById(userId, {refreshToken: null})
+        }
+    }
 
     refreshTokens(){}
 }
