@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { ScoreInfo, User, UserDocument,  } from './users.schema';
 import * as crypto from 'crypto';
-import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { UpdateUserScoreDto } from './dto/update-user-score.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 
 // export interface ScoreInfo {
@@ -34,7 +34,7 @@ export class UsersService {
     return createdUser.save();
   }
 
-  async updateUserScore(updateUserScoreDto: UpdateUserDto): Promise<{
+  async updateUserScore(updateUserScoreDto: UpdateUserScoreDto): Promise<{
     status: string;
     statusCode: number;
     message: string;
@@ -113,5 +113,18 @@ export class UsersService {
     }
   }
 
+  async updateById (id: string, updateUserDto: UpdateUserScoreDto) : Promise<User>  {
+    const updatedUser = await this.userModel.findByIdAndUpdate(
+      id,
+      updateUserDto,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      throw new NotFoundException(`User with ID "${id}" not found`);
+    }
+
+    return updatedUser;
+  }
   // Add other methods as needed
 }

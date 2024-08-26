@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { GetUsersResponseDto } from './dto/get-users-response.dto';
 import { User } from 'src/users/users.schema';
 import { UsersService } from 'src/users/users.service';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserScoreDto } from './dto/update-user-score.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -28,7 +28,7 @@ export class UsersController {
     description: 'The user has been successfully created.',
     type: User
   })
-  async updateUserScore(@Body() updateUserScoreDto: UpdateUserDto) {
+  async updateUserScore(@Body() updateUserScoreDto: UpdateUserScoreDto) {
     return this.usersService.updateUserScore(updateUserScoreDto)
   }
 

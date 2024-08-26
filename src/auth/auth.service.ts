@@ -7,7 +7,7 @@ import { Tokens } from './types/tokens.type';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from 'src/users/users.schema';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UtilsService } from 'src/utils/utils';
 
@@ -67,6 +67,12 @@ export class AuthService {
         const tokens = await this.getTokens(newUser._id.toString(), newUser.email)
         return tokens
     }
+
+    async updateRtHash (userId: string, rt: string) {
+        const hash = await this.utils.hashData(rt)
+        // await this.userService.updateById(userId, )
+    }
+
 
     signinLocal(){}
     

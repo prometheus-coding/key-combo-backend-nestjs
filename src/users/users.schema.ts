@@ -40,7 +40,7 @@ export class User {
   @Prop({ required: true })
   first_name: string;
 
-  @ApiProperty({ example: 'Doe', description: 'The last name of the user' })
+  @ApiProperty({ example: 'Doe', description: 'The last name of the   user' })
   @Prop({ required: true })
   last_name: string;
 
