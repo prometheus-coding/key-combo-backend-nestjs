@@ -13,7 +13,6 @@ import { PassportModule } from '@nestjs/passport';
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.register({}),
-    PassportModule.register({}),
   ],
   providers: [
     AuthService,
