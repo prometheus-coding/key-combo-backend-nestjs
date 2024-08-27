@@ -58,6 +58,7 @@ export class AuthController {
     @GetCurrentUser('refreshToken') rt: string,
     @GetCurrentUserId() userId: string
   ) {
-    return rt
+    this.logger.log(rt)
+    return this.authService.refreshTokens(userId, rt)
   }
 }

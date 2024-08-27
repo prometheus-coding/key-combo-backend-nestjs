@@ -131,9 +131,10 @@ export class AuthService {
 
   async refreshTokens(userId: string, refreshToken: string) {
     const user = await this.userService.findById(userId);
-    this.logger.log(user);
-    this.logger.log(userId)
-    this.logger.log(refreshToken)
+    console.log(refreshToken)
+    // this.logger.log(user);
+    // this.logger.log(userId)
+
     if (!user) {
       throw new ForbiddenException('Access Denied');
     }
