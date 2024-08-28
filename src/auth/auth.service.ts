@@ -99,7 +99,7 @@ export class AuthService {
     await this.userService.updateById(userId, { refreshToken: hash });
   }
 
-  async signinLocal(authDto: AuthDto): Promise<Tokens> {
+  async signinLocal(authDto: AuthDto){
     try {
       const user = await this.userService.findByEmail(authDto.email);
       if (!user) {
@@ -113,7 +113,19 @@ export class AuthService {
 
       const tokens = await this.getTokens(user._id.toString(), user.email);
       await this.updateRtHash(user._id.toString(), tokens.refresh_token);
-      return tokens;
+      return {
+        status: 200,
+        message: 'User Logged In',
+        data: {
+          username: user.username,
+          email: user.email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          scores: user.scores,
+          access_token: tokens.access_token,
+          refresh_token: tokens.refresh_token
+        }
+      }
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         throw error;
