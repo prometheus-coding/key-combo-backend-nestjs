@@ -6,16 +6,17 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.setGlobalPrefix('api/v1')
+  // per far funzionare 3001
+  app.enableCors();
+  app.setGlobalPrefix('api/v1');
   const config = new DocumentBuilder()
-  .setTitle('K-Combo API')
-  .setDescription('The K-Combo REST API description')
-  .setVersion('1.0')
-  .build();
+    .setTitle('K-Combo API')
+    .setDescription('The K-Combo REST API description')
+    .setVersion('1.0')
+    .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
-  app.useGlobalPipes(new ValidationPipe())
-  await app.listen(3000);
+  app.useGlobalPipes(new ValidationPipe());
+  await app.listen(3001);
 }
 bootstrap();
-
