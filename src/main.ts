@@ -6,8 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  // per far funzionare 3001
-  app.enableCors();
+  app.enableCors(); // abilitato cors per ricevere posto da front
   app.setGlobalPrefix('api/v1');
   const config = new DocumentBuilder()
     .setTitle('K-Combo API')
