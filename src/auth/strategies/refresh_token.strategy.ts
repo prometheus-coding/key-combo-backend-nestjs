@@ -11,12 +11,13 @@ export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-refres
     constructor() {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+            ignoreExpiration: false,
             secretOrKey: 'rt-secret',
             passReqToCallback: true,
         })
     }
     
-    validate(req: Request, payload: JwtPayload) {
+    async validate(req: Request, payload: JwtPayload) {
         // Log the headers to check if the authorization header is present
         console.log('Authorization Header:', req.headers['authorization']);
 

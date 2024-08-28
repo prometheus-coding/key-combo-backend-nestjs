@@ -45,20 +45,25 @@ export class AuthController {
     return this.authService.signinLocal(authDto);
   }
 
-  @UseGuards(AccessTokenGuard)
+  // @UseGuards(AccessTokenGuard)
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
   logout(@GetCurrentUserId() userId: string) {
     return this.authService.logout(userId)
   }
 
+
+  //TODO
+  //Capire perché refresh_token.strategy.ts non viene mai chiamato
   @UseGuards(RefreshTokenGuard)
   @Post('/refresh')
   refreshTokens(
-    @GetCurrentUser('refreshToken') rt: string,
-    @GetCurrentUserId() userId: string
+    // @GetCurrentUser('refreshToken') rt: string,
+    @GetCurrentUserId() userId: string,
+    @Req() req: Request
   ) {
-    this.logger.log(rt)
-    return this.authService.refreshTokens(userId, rt)
+    // this.logger.log(rt)
+    const refreshToken = req.rawHeaders[1].replace('Bearer', '').trim()
+    return this.authService.refreshTokens(userId, refreshToken)
   }
 }

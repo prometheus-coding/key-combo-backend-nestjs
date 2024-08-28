@@ -131,17 +131,14 @@ export class AuthService {
 
   async refreshTokens(userId: string, refreshToken: string) {
     const user = await this.userService.findById(userId);
-    console.log(refreshToken)
-    // this.logger.log(user);
-    // this.logger.log(userId)
 
     if (!user) {
       throw new ForbiddenException('Access Denied');
     }
-    // const rtMatches = await bcrypt.compare(refreshToken, user.refreshToken);
-    // if (!rtMatches) {
-    //   throw new ForbiddenException('Access Denied');
-    // }
+    const rtMatches = await bcrypt.compare(refreshToken, user.refreshToken);
+    if (!rtMatches) {
+      throw new ForbiddenException('Access Denied');
+    }
 
     const tokens = await this.getTokens(user._id.toString(), user.email);
     await this.updateRtHash(user._id.toString(), tokens.refresh_token);
