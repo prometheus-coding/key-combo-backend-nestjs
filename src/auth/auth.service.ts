@@ -17,6 +17,7 @@ import { Model, ObjectId } from 'mongoose';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UtilsService } from 'src/utils/utils';
 import { UpdateUserDto } from 'src/users/dto/update-user-dto';
+import { UserResponseSignupOk } from './dto/user-response-ok';
 
 @Injectable()
 export class AuthService {
@@ -57,7 +58,7 @@ export class AuthService {
     };
   }
 
-  async signupLocal(createUserDto: CreateUserDto): Promise<Tokens> {
+  async signupLocal(createUserDto: CreateUserDto): Promise<UserResponseSignupOk> {
     try {
       const existingUser = await this.userService.findByEmail(
         createUserDto.email
@@ -85,7 +86,22 @@ export class AuthService {
         newUser.email
       );
       await this.updateRtHash(newUser.id, tokens.refresh_token);
-      return tokens;
+      
+      const responseUser: UserResponseSignupOk = {
+        message: 'User signed up successfully',
+        status: 201,
+        data: {
+          first_name: newUser.first_name,
+          last_name: newUser.last_name,
+          username: newUser.username,
+          email: newUser.email,
+          vimToken: newUser.id_token,
+          access_token: tokens.access_token,
+          refresh_token: tokens.refresh_token
+
+        }
+      }
+      return responseUser
     } catch (error) {
       if (error instanceof BadRequestException) {
         throw error;
