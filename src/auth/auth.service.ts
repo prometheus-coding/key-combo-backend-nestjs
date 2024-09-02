@@ -101,6 +101,7 @@ export class AuthService {
 
         }
       }
+      this.logger.log(responseUser)
       return responseUser
     } catch (error) {
       if (error instanceof BadRequestException) {

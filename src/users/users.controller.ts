@@ -60,6 +60,21 @@ export class UsersController {
     return await this.usersService.getUserDataFromToken(id_token)
   }
 
+  @Get('/getAllUsersBestScore')
+  @ApiOperation({ summary: 'Get all the best scores from all users' })
+  @ApiResponse({
+    status: 201,
+    description: 'User retrieved successfully',
+  })
+  async getAllUserBestScore (){
+    return await this.usersService.getAllUsersWithBestScores()
+  }
 
-  // Add other endpoints as needed
+
+
+
+
+
+
+
 }

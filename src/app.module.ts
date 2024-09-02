@@ -6,7 +6,6 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { NvimPluginModule } from './vim/nvim-plugin.module';
 import { AuthModule } from './auth/auth.module';
-import { LoggerMiddleware, LoggerService } from './utils/logger.service';
 
 @Module({
   imports: [
@@ -23,10 +22,6 @@ import { LoggerMiddleware, LoggerService } from './utils/logger.service';
     AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService, LoggerService],
+  providers: [AppService],
 })
-export class AppModule implements NestModule{
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*')
-  }
-}
+export class AppModule{}

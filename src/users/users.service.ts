@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
-import { ScoreInfo, User, UserDocument,  } from './users.schema';
+import { ScoreInfo, User, UserDocument } from './users.schema';
 import * as crypto from 'crypto';
 import { UpdateUserScoreDto } from './dto/update-user-score.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user-dto';
+import { UserScoreDto } from './dto/get-user-and-score.dto';
 
 // export interface ScoreInfo {
 //   score: number;
@@ -21,7 +22,11 @@ export class UsersService {
     @InjectConnection() private connection: Connection
   ) {
     console.log('Database name:', this.connection.name);
-    console.log('User service successfully mapped to ', Object.keys(this.connection.collections), 'collection');
+    console.log(
+      'User service successfully mapped to ',
+      Object.keys(this.connection.collections),
+      'collection'
+    );
   }
 
   private generateRandomToken(): string {
@@ -42,16 +47,16 @@ export class UsersService {
     data?: {
       user: {
         username: string;
-        scores: ScoreInfo
+        scores: ScoreInfo;
       };
     };
     error?: string;
   }> {
     const id_token = updateUserScoreDto.id_token;
-    
+
     try {
       const user = await this.userModel.findOne({ id_token }).exec();
-      
+
       if (!user) {
         return {
           status: 'fail',
@@ -60,18 +65,18 @@ export class UsersService {
           error: 'No user found with the provided id_token'
         };
       }
-  
+
       // Update user score data
-      const newScore:ScoreInfo = {
+      const newScore: ScoreInfo = {
         score: updateUserScoreDto.score,
         combo_duration_in_seconds: updateUserScoreDto.combo_duration_in_seconds,
         total_key_pressed: updateUserScoreDto.total_key_pressed,
         achieved_at: updateUserScoreDto.score_updated_at
-      }
-      user.scores.push(newScore)
-  
+      };
+      user.scores.push(newScore);
+
       const updatedUser = await user.save();
-  
+
       return {
         status: 'success',
         statusCode: 200,
@@ -100,29 +105,50 @@ export class UsersService {
     }
     return user;
   }
-  
+
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
 
-  async getUserDataFromToken(id_token: string): Promise<User | null>{
+  async getUserDataFromToken(id_token: string): Promise<User | null> {
     const idObg = new Object({
-      "id_token": id_token
-    })
+      id_token: id_token
+    });
     try {
-      const user = await this.userModel.findOne(idObg).exec()
-      if(user){
-        return user
+      const user = await this.userModel.findOne(idObg).exec();
+      if (user) {
+        return user;
       } else {
-        return null
+        return null;
       }
     } catch (error) {
-      console.error('Error retrieving user:', error)
-      return null
+      console.error('Error retrieving user:', error);
+      return null;
     }
   }
 
-  async updateById (id: string, updateUserDto: UpdateUserDto) : Promise<User>  {
+  async getAllUsersWithBestScores(): Promise<UserScoreDto[]> {
+    // Fetch all users
+    const users = await this.userModel.find().exec();
+
+    // Filter out users without scores and transform the rest
+    const result = users
+      .filter((user) => user.scores && user.scores.length > 0) // Only include users with scores
+      .map((user) => {
+        const bestScore = user.scores.reduce((max, scoreInfo) => {
+          return scoreInfo.score > max.score ? scoreInfo : max;
+        }, user.scores[0]); // Initialize with the first score
+
+        return {
+          username: user.username,
+          bestScore
+        };
+      });
+
+    return result;
+  }
+
+  async updateById(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     const updatedUser = await this.userModel.findByIdAndUpdate(
       id,
       updateUserDto,
@@ -136,8 +162,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  async findByEmail(email:string): Promise<User | null >{
-    return this.userModel.findOne({email}).exec()
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userModel.findOne({ email }).exec();
   }
-
 }
