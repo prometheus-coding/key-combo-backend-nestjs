@@ -13,12 +13,9 @@ import { AuthDto } from './dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Tokens } from './types/tokens.type';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { AuthGuard } from '@nestjs/passport';
-import { User } from 'src/users/users.schema';
 import { Request } from 'express';
-import { JwtPayload } from './strategies';
-import { AccessTokenGuard, RefreshTokenGuard } from 'src/common/guards';
-import { GetCurrentUser, GetCurrentUserId } from 'src/common/decorators';
+import { RefreshTokenGuard } from 'src/common/guards';
+import { GetCurrentUserId } from 'src/common/decorators';
 
 @ApiTags('Auth')
 @Controller('auth')

@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 // cors
 // import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
@@ -23,8 +23,11 @@ async function bootstrap() {
     .setDescription('The K-Combo REST API description')
     .setVersion('1.0')
     .build();
+  const options: SwaggerCustomOptions = {
+    yamlDocumentUrl: 'api-yaml'
+  }
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+  SwaggerModule.setup('api-docs', app, document, options);
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3001);
 }
