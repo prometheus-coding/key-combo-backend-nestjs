@@ -6,6 +6,7 @@ import { User } from 'src/users/users.schema';
 import { UsersService } from 'src/users/users.service';
 import { UpdateUserScoreDto } from './dto/update-user-score.dto';
 import { AuthDto } from 'src/auth/dto';
+import { UserScoreDto } from './dto/get-user-and-score.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -65,6 +66,7 @@ export class UsersController {
   @ApiResponse({
     status: 201,
     description: 'User retrieved successfully',
+    type: UserScoreDto
   })
   async getAllUserBestScore (){
     return await this.usersService.getAllUsersWithBestScores()
